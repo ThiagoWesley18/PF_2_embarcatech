@@ -30,8 +30,8 @@
 #define abs(x) ((x < 0) ? (-x) : (x))
 
 // Configure o SSID e senha da sua rede
-const char ssid[] = "Anne Bia - 2.4G";
-const char password[] = "beatriz907";
+const char ssid[] = SSID_HOST;
+const char password[] = PASSWORD_HOST;
 const char target_ssid[] = "A54 de Thiago";
 
 // Pinos do I2C para o display OLED
@@ -83,90 +83,19 @@ int main() {
         avg = 2.f * abs(ADC_ADJUST(avg)); // Ajusta para intervalo de 0 a 3.3V. (apenas magnitude, sem sinal)
 
         uint intensity = get_intensity(avg); // Calcula intensidade do volume.
-        // Envia a intensidade e a média das leituras do ADC por serial.
-        
-        //printf("itensidade: %2d\n", intensity); 
-        
 
-        // Limpa a matriz de LEDs.
-        npClear();
+        start_Matrix(&intensity);
 
-        // A depender da intensidade do som, acende LEDs específicos.
-        switch (intensity) {
-            case 0: break; // Se o som for muito baixo, não acende nada.
-            case 2:
-            npSetLED(12, 0, 0, 80); // Acende apenas o centro.
-            break;
-            case 3:
-            npSetLED(12, 0, 0, 120); // Acente o centro.
-    
-            // Primeiro anel.
-            npSetLED(7, 0, 0, 80);
-            npSetLED(11, 0, 0, 80);
-            npSetLED(13, 0, 0, 80);
-            npSetLED(17, 0, 0, 80);
-            break;
-            case 4:
-            // Centro.
-            npSetLED(12, 60, 60, 0);
-    
-            // Primeiro anel.
-            npSetLED(7, 0, 0, 120);
-            npSetLED(11, 0, 0, 120);
-            npSetLED(13, 0, 0, 120);
-            npSetLED(17, 0, 0, 120);
-    
-            // Segundo anel.
-            npSetLED(2, 0, 0, 80);
-            npSetLED(6, 0, 0, 80);
-            npSetLED(8, 0, 0, 80);
-            npSetLED(10, 0, 0, 80);
-            npSetLED(14, 0, 0, 80);
-            npSetLED(16, 0, 0, 80);
-            npSetLED(18, 0, 0, 80);
-            npSetLED(22, 0, 0, 80);
-            break;
-            case 6:
-            // Centro.
-            npSetLED(12, 80, 0, 0);
-    
-            // Primeiro anel.
-            npSetLED(7, 60, 60, 0);
-            npSetLED(11, 60, 60, 0);
-            npSetLED(13, 60, 60, 0);
-            npSetLED(17, 60, 60, 0);
-    
-            // Segundo anel.
-            npSetLED(2, 0, 0, 120);
-            npSetLED(6, 0, 0, 120);
-            npSetLED(8, 0, 0, 120);
-            npSetLED(10, 0, 0, 120);
-            npSetLED(14, 0, 0, 120);
-            npSetLED(16, 0, 0, 120);
-            npSetLED(18, 0, 0, 120);
-            npSetLED(22, 0, 0, 120);
-    
-            // Terceiro anel.
-            npSetLED(1, 0, 0, 80);
-            npSetLED(3, 0, 0, 80);
-            npSetLED(5, 0, 0, 80);
-            npSetLED(9, 0, 0, 80);
-            npSetLED(15, 0, 0, 80);
-            npSetLED(19, 0, 0, 80);
-            npSetLED(21, 0, 0, 80);
-            npSetLED(23, 0, 0, 80);
+        if(intensity >= 6){
             scan_result++;
             printf("scan_result: %d\n", scan_result);
-            break;
         }
-        
-        // Flag para ativar ou desativar o scan por voz.
+         // Flag para ativar ou desativar o scan por voz.
         if(scan_result >= 10){
             scan_active = true;
+            scan_result = 0;
         }
-
-        // Atualiza a matriz.
-        npWrite(); 
+         
     }
     cyw43_arch_deinit();
     return 0;

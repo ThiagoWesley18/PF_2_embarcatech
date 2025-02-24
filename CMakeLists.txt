@@ -24,6 +24,10 @@ if (EXISTS ${picoVscode})
 endif()
 # ====================================================================================
 set(PICO_BOARD pico_w CACHE STRING "Board type")
+# Define uma variável personalizada
+set(SSID_HOST "OMS OI FIBRA")
+# Define uma variável personalizada
+set(PASSWORD_HOST "oms29916")
 
 # Pull in Raspberry Pi Pico SDK (must be before project)
 include(pico_sdk_import.cmake)
@@ -38,6 +42,11 @@ pico_sdk_init()
 #pico_set_program_version(PF_2_embarcatech "0.1")
 
 add_executable(PF_2_embarcatech PF_2_embarcatech.c display_oled.c inc/ssd1306_i2c.c)
+
+target_compile_definitions(PF_2_embarcatech PRIVATE 
+    SSID_HOST="${SSID_HOST}" 
+    PASSWORD_HOST="${PASSWORD_HOST}"
+    )
 
 # Generate PIO header
 pico_generate_pio_header(PF_2_embarcatech ${CMAKE_CURRENT_LIST_DIR}/ws2818b.pio)

@@ -38,7 +38,7 @@ void connecte_oled(int status)
     }else if(status == 2){
         text[0] = "  Desconectado   ";
     }else if(status == 0){
-        text[0] = "  ";
+        text[0] = "  Bem vindo   ";
     }
     
    
